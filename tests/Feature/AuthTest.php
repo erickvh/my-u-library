@@ -20,7 +20,8 @@ class AuthTest extends TestCase
     public function test_api_register_when_success()
     {
         $response = $this->postJson('/api/register', [
-            'name' => 'test',
+            'first_name' => 'Jonh',
+            'last_name' => 'Doe',
             'email' => 'test@email.com',
             'password' => 'passwordABC'
 
@@ -31,7 +32,8 @@ class AuthTest extends TestCase
 
             'data' => [
                 'id',
-                'name',
+                'first_name',
+                'last_name',
                 'email',
                 'created_at',
                 'updated_at'
@@ -50,7 +52,8 @@ class AuthTest extends TestCase
         $response->assertJsonStructure([
             'message',
             'errors' => [
-                'name',
+                'first_name',
+                'last_name',
                 'email',
                 'password'
             ]
@@ -60,7 +63,8 @@ class AuthTest extends TestCase
     public function test_api_login_when_success()
     {
         $body = [
-            'name' => 'test',
+            'first_name' => 'Jonh',
+            'last_name' => 'Doe',
             'email' => 'test@email.com',
             'password' => bcrypt('passwordABC')
         ];
@@ -83,7 +87,8 @@ class AuthTest extends TestCase
     public function test_api_login_when_fail_credentials()
     {
         $body = [
-            'name' => 'test',
+            'first_name' => 'Jonh',
+            'last_name' => 'Doe',
             'email' => 'test@email.com',
             'password' => bcrypt('passwordABC')
         ];
@@ -118,10 +123,12 @@ class AuthTest extends TestCase
     public function test_api_logout_when_success()
     {
         $body = [
-            'name' => 'test',
+            'first_name' => 'Jonh',
+            'last_name' => 'Doe',
             'email' => 'test@email.com',
             'password' => bcrypt('passwordABC')
         ];
+
         User::create($body);
 
 
