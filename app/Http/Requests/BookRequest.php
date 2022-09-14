@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterRequest extends FormRequest
+class BookRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,13 +23,13 @@ class RegisterRequest extends FormRequest
      */
     public function rules()
     {
-
         return [
-            'first_name' => 'required|string|min:2|max:50',
-            'last_name' => 'required|string|min:2|max:50',
-            'email' => 'required|string|email|unique:users',
-            'password' => 'required|string',
-            'role_id' => 'required|integer'
+            'title' => 'required|string|min:3|max:50',
+            'author' => 'required|string|min:3|max:100',
+            'description' => 'nullable|string|max:255',
+            'published_year' => 'required|digits:4|integer|min:1900|max:' . (date('Y') + 1),
+            'stock' => 'nullable|integer',
+            'genre_id' => 'required|integer',
         ];
     }
 }
