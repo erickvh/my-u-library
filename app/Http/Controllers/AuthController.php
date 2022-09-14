@@ -24,6 +24,7 @@ class AuthController extends Controller
         $user->save();
 
         return response()->json([
+            'data' => $user,
             'message' => 'Successfully created user'
         ], 201);
     }
