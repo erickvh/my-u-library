@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
 
 class AuthController extends Controller
 {
@@ -63,5 +64,11 @@ class AuthController extends Controller
         return response([
             'message' => 'success'
         ])->withCookie($cookie);
+    }
+
+    public function getRoles()
+    {
+        $roles = Role::all();
+        return response()->json($roles);
     }
 }

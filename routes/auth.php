@@ -11,3 +11,5 @@ Route::post('login', [AuthController::class, 'login']);
 
 
 Route::get('checkout', [CheckoutController::class, 'index'])->middleware('auth:sanctum');
+
+Route::get('roles', [AuthController::class, 'getRoles'])->middleware(['auth:sanctum', 'permission:role.index']);

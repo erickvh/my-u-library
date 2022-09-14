@@ -143,7 +143,37 @@ class AuthTest extends TestCase
         $response->assertStatus(401);
     }
 
+    public function test_api_roles_success()
+    {
+        $response = $this->getJson('/api/roles');
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            [
+                'id',
+                'name',
+            ]
+        ]);
+    }
 
+    public function test_api_roles_fail()
+    {
+        $user = User::create(
+            [
+                'first_name' => 'test',
+                'last_name' => 'test',
+                'email' => 'student@test',
+                'password' => bcrypt('test')
+            ]
+        );
+        $token = $user->createToken('token')->plainTextToken;
+        $user->assignRole(Role::where('name', 'student')->first());
+        $user->save();
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token
+        ]);
+        $response = $this->getJson('/api/roles');
+        $response->assertStatus(403);
+    }
     public function test_api_logout_when_success()
     {
         $body = [

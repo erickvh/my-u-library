@@ -102,6 +102,29 @@ class BookTest extends TestCase
         );
     }
 
+    public function test_api_genre()
+    {
+        $token = $this->getToken('librarian');
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $token,
+            'Accept' => 'application/json',
+        ]);
+
+
+
+        $response = $this->getJson('/api/genres');
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            '*' => [
+                'id',
+                'name',
+                'created_at',
+                'updated_at'
+            ]
+        ]);
+    }
+
     public function test_api_show_book_when_error()
     {
         $lastBook = Book::orderBy('id', 'desc')->first();

@@ -24,6 +24,9 @@ return new class extends Migration
         Permission::create(['name' => 'student.getBooks']);
         Permission::create(['name' => 'student.returnBook']);
         Permission::create(['name' => 'student.myBooks']);
+        // complementary resources
+        Permission::create(['name' => 'genre.index']);
+        Permission::create(['name' => 'role.index']);
 
         Role::where('name', 'student')->first()->givePermissionTo([
             'book.index',
@@ -37,6 +40,8 @@ return new class extends Migration
             'student.myBooks',
             'book.show',
             'book.create',
+            'genre.index',
+            'role.index',
             'student.index',
             'student.getBooks',
             'student.returnBook',
