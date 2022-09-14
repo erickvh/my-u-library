@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('title', 50);
             $table->string('author', 100);
-            $table->string('description', 255);
+            $table->string('description', 255)->nullable();
             $table->unsignedInteger('published_year')->nullable();
             $table->unsignedBigInteger('stock')->default(0);
             $table->foreignId('genre_id')->constrained();
