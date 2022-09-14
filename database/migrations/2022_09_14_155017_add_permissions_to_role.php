@@ -34,6 +34,7 @@ return new class extends Migration
 
         Role::where('name', 'librarian')->first()->givePermissionTo([
             'book.index',
+            'student.myBooks',
             'book.show',
             'book.create',
             'student.index',

@@ -48,6 +48,6 @@ class User extends Authenticatable
 
     public function books()
     {
-        return $this->belongsToMany(Book::class, 'users_books')->withTimestamps();;
+        return $this->belongsToMany(Book::class, 'users_books')->withTimestamps()->withPivot('status');
     }
 }

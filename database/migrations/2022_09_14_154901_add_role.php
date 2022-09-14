@@ -14,8 +14,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Role::create(['name' => 'student']);
         Role::create(['name' => 'librarian']);
+        Role::create(['name' => 'student']);
     }
 
     /**

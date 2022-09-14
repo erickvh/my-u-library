@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+
         User::factory()->count(10)->create();
         $roles = Role::all();
         $users = User::all();
@@ -24,5 +25,21 @@ class UserSeeder extends Seeder
         foreach ($users as $user) {
             $user->assignRole($roles->random());
         }
+
+
+        User::create([
+            'first_name' => 'Librarian',
+            'last_name' => 'Librarian',
+            'email' => 'librarian@u.test',
+            'password' => bcrypt('password')
+        ])->assignRole('librarian');
+
+
+        User::create([
+            'first_name' => 'student',
+            'last_name' => 'student',
+            'email' => 'student@u.test',
+            'password' => bcrypt('password')
+        ])->assignRole('student');
     }
 }
