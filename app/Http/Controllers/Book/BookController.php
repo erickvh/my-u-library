@@ -31,4 +31,24 @@ class BookController extends Controller
 
         return response()->json($book, 201);
     }
+
+
+    public function checkout(Request $request)
+    {
+        $book = Book::find($request->id);
+
+        if (!$book) {
+            return response()->json(['message' => 'Book not found'], 404);
+        }
+
+        if ($book->stock <= 0) {
+            return response()->json(['message' => 'Book out of stock'], 400);
+        }
+
+        $book->users()->attach($request->user()->id);
+        $book->stock -= 1;
+        $book->save();
+
+        return response()->json(['data' => $book, 'message' => 'Book checked out successfully']);
+    }
 }

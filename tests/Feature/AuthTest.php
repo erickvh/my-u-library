@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -17,15 +18,38 @@ class AuthTest extends TestCase
      *
      * @return void
      */
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $user = User::create(
+            [
+                'first_name' => 'test',
+                'last_name' => 'test',
+                'email' => 'librarian@test',
+                'password' => bcrypt('test')
+            ]
+        );
+        $this->token = $user->createToken('token')->plainTextToken;
+        $user->assignRole(Role::where('name', 'librarian')->first());
+        $user->save();
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token
+        ]);
+    }
+
     public function test_api_register_when_success()
     {
+
+        $student = Role::where('name', 'student')->first();
         $response = $this->postJson('/api/register', [
             'first_name' => 'Jonh',
             'last_name' => 'Doe',
             'email' => 'test@email.com',
-            'password' => 'passwordABC'
-
+            'password' => 'passwordABC',
+            'role_id' => $student->id
         ]);
+
 
         $response->assertStatus(201);
         $response->assertJsonStructure([

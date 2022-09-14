@@ -26,7 +26,7 @@ class BookTest extends TestCase
     public function setup(): void
     {
         parent::setup();
-        $this->token = $this->getToken();
+        $this->token = $this->getToken('student');
 
         $this->seed(GenreSeeder::class);
         $this->seed(BookSeeder::class);
@@ -37,16 +37,16 @@ class BookTest extends TestCase
         ]);
     }
 
-    public function getToken()
+    public function getToken($role)
     {
-
+        $email = $role . '@test';
         $user = User::create([
             'first_name' => 'Jonh',
             'last_name' => 'Doe',
-            'email' => 'test@test.com',
+            'email' => $email,
             'password' => 'password'
         ]);
-
+        $user->assignRole($role);
         return $user->createToken('token')->plainTextToken;
     }
 
@@ -115,7 +115,14 @@ class BookTest extends TestCase
 
     public function test_api_create_book_success()
     {
+        $this->token = $this->getToken('librarian');
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+            'Accept' => 'application/json',
+        ]);
+
         $genre = Genre::first();
+
         $response = $this->postJson('/api/books', [
             'title' => 'Test',
             'description' => 'Test',
@@ -142,6 +149,12 @@ class BookTest extends TestCase
 
     public function test_api_create_book_error()
     {
+        $this->token = $this->getToken('librarian');
+        $this->withHeaders([
+            'Authorization' => 'Bearer ' . $this->token,
+            'Accept' => 'application/json',
+        ]);
+
         $genre = Genre::first();
         $response = $this->postJson('/api/books', [
             'description' => 'Test',
@@ -158,6 +171,43 @@ class BookTest extends TestCase
                 'title',
                 'author'
             ]
+        ]);
+    }
+
+
+    public function test_api_checkout_success()
+    {
+        $book = Book::first();
+        $response = $this->postJson("/api/books/$book->id/checkout");
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'message'
+        ]);
+    }
+
+    public function test_api_checkout_out_of_stock()
+    {
+        $book = Book::first();
+        $book->stock = 0;
+        $book->save();
+
+        $response = $this->postJson("/api/books/$book->id/checkout");
+
+        $response->assertStatus(400);
+        $response->assertJsonStructure([
+            'message'
+        ]);
+    }
+
+    public function test_api_checkout_not_found()
+    {
+        $book = Book::orderBy('id', 'desc')->first();
+        $response = $this->postJson("/api/books/" . ($book->id + 1) . "/checkout");
+
+        $response->assertStatus(404);
+        $response->assertJsonStructure([
+            'message'
         ]);
     }
 }
