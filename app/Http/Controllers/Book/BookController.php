@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Book;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\BookRequest;
 use App\Models\Book\Book;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class BookController extends Controller
         return response()->json($book);
     }
 
-    public function create(Request $request)
+    public function create(BookRequest $request)
     {
         $book = Book::create($request->all());
 

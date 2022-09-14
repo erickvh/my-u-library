@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('title', 50);
-            $table->string('author', 100);
+            $table->string('author', 50);
             $table->string('description', 255)->nullable();
             $table->unsignedInteger('published_year')->nullable();
             $table->unsignedBigInteger('stock')->default(0);

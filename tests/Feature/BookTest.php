@@ -138,4 +138,26 @@ class BookTest extends TestCase
 
         ]);
     }
+
+
+    public function test_api_create_book_error()
+    {
+        $genre = Genre::first();
+        $response = $this->postJson('/api/books', [
+            'description' => 'Test',
+            'author' => '',
+            'genre_id' => $genre->id,
+            'published_year' => 2021,
+            'stock' => 10
+        ]);
+
+        $response->assertUnprocessable();
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'title',
+                'author'
+            ]
+        ]);
+    }
 }
