@@ -2,6 +2,7 @@
 
 namespace App\Models\Book;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -50,5 +51,10 @@ class Book extends Model
             return $query->whereHas('genre', function ($query) use ($genre) {
                 $query->where('name', 'ilike', "%$genre%");
             });
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'users_books');
     }
 }
