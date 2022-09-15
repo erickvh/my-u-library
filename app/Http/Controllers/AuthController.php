@@ -35,22 +35,22 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $request->email)
+            ->first();
+
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'message' => 'Bad credentials'
             ], 401);
         }
-
-        $token = $user->createToken('token')->plainTextToken;
-
-        $cookie = cookie('jwt', $token, 60 * 24);
-
-        return response([
+        $body = [
             'message' => 'success',
-            'token' => $token
-        ])->withCookie($cookie);
+            'user' => $user,
+            'token' => $user->createToken('token')->plainTextToken,
+        ];
+
+        return response()->json($body, 200);
     }
 
 

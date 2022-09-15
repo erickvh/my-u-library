@@ -35,6 +35,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'created_at',
+        'updated_at',
+        'email_verified_at',
+        'roles',
+        'permissions'
+    ];
+
+    protected $appends = [
+        'permission'
     ];
 
     /**
@@ -49,5 +58,10 @@ class User extends Authenticatable
     public function books()
     {
         return $this->belongsToMany(Book::class, 'users_books')->withTimestamps()->withPivot('status');
+    }
+
+    public function getPermissionAttribute()
+    {
+        return $this->getAllPermissions()->pluck('name');
     }
 }
