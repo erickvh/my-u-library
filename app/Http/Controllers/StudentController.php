@@ -43,7 +43,8 @@ class StudentController extends Controller
         $book->pivot->status = 'returned';
         $book->pivot->save();
 
-        $book->stock = $book->stock - 1;
+        $book->stock = $book->stock + 1;
+        $book->save();
 
         return response()->json(['message' => 'Book returned successfully']);
         return response()->json();

@@ -15,7 +15,7 @@ return new class extends Migration
      */
     public function up()
     {
-
+        Permission::create(['name' => 'user.create']);
         Permission::create(['name' => 'book.index']);
         Permission::create(['name' => 'book.show']);
         Permission::create(['name' => 'book.create']);
@@ -42,6 +42,7 @@ return new class extends Migration
             'book.create',
             'genre.index',
             'role.index',
+            'user.create',
             'student.index',
             'student.getBooks',
             'student.returnBook',
@@ -62,5 +63,10 @@ return new class extends Migration
         Permission::where('name', 'student.index')->delete();
         Permission::where('name', 'student.getBooks')->delete();
         Permission::where('name', 'student.returnBook')->delete();
+        Permission::where('name', 'student.myBooks')->delete();
+        // complementary resources
+        Permission::where('name', 'genre.index')->delete();
+        Permission::where('name', 'role.index')->delete();
+        Permission::where('name', 'user.create')->delete();
     }
 };
